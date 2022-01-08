@@ -28,12 +28,11 @@
 
 import './index.css';
 import initOpenCascade from 'opencascade.js'
-
+import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js'
 initOpenCascade().then(oc => {
     // Check out the examples on how to use this library!
     
     console.log('👋 This message is being logged by "renderer.js", included via webpack ');
-    
+    let loader = new GLTFLoader();
+    console.log(typeof(loader));
   });
-
-
