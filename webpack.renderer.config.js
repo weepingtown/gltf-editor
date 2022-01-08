@@ -8,7 +8,10 @@ rules.push({
 {
   test: /\.wasm$/,
   type: "javascript/auto",
-  loader: "file-loader"
+  loader: "file-loader",
+  options: {
+    outputPath: "wasm/"
+  }
 });
 
 module.exports = {
