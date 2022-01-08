@@ -27,5 +27,13 @@
  */
 
 import './index.css';
+import initOpenCascade from 'opencascade.js'
 
-console.log('👋 This message is being logged by "renderer.js", included via webpack');
+initOpenCascade().then(oc => {
+    // Check out the examples on how to use this library!
+    
+    console.log('👋 This message is being logged by "renderer.js", included via webpack ');
+    
+  });
+
+

@@ -72,10 +72,12 @@
     "@vercel/webpack-asset-relocator-loader": "^1.7.0",
     "css-loader": "^6.5.1",
     "electron": "16.0.5",
+    "file-loader": "^6.2.0",
     "node-loader": "^2.0.0",
     "style-loader": "^3.3.1"
   },
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.0"
+    "electron-squirrel-startup": "^1.0.0",
+    "opencascade.js": "^2.0.0-beta.371bbb0"
   }
 }
