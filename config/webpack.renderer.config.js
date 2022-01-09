@@ -1,7 +1,5 @@
 const rules = require('./webpack.rules');
-const fs = require('fs');
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const path = require('path')
+
 rules.push({
   test: /\.css$/,
   use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
@@ -13,15 +11,6 @@ rules.push({
     options: {
       outputPath: "wasm/"
     }
-  },
-  // JS
-  {
-    test: /\.js$/,
-    exclude: /node_modules/,
-    use:
-      [
-        'babel-loader'
-      ]
   });
 
 module.exports = {

@@ -31,8 +31,8 @@ module.exports = {
                     config: "./config/webpack.renderer.config.js",
                     entryPoints: [
                         {
-                            html: "./src/renderer/index.html",
-                            js: "./src/renderer/renderer.js",
+                            html: "./src/editor/index.html",
+                            js: "./src/editor/renderer.js",
                             name: "main_window",
                             devContentSecurityPolicy: "default-src 'self' 'unsafe-inline' data:; script-src 'self' 'unsafe-eval' 'unsafe-inline' data:"
                         }
