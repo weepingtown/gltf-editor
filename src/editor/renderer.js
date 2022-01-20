@@ -9,192 +9,208 @@ import { Menubar } from './js/Menubar.js';
 import { Resizer } from './js/Resizer.js';
 import { VRButton } from 'three/examples/jsm/webxr/VRButton.js';
 
-import './css/main.css'
-//document.onload = function createEditorElement() {
-    window.URL = window.URL || window.webkitURL;
-    window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder;
+import "./css/main.css"
 
-    Number.prototype.format = function () {
+import "./js/libs/codemirror/codemirror.css"
+import "./js/libs/codemirror/theme/monokai.css"
 
-        return this.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+import "./js/libs/codemirror/addon/dialog.css"
+import "./js/libs/codemirror/addon/show-hint.css"
+import "./js/libs/codemirror/addon/tern.css"
 
-    };
+/*
+import initOpenCascade from 'opencascade.js'
+initOpenCascade().then(oc => {
+    console.log('👋 This message is being logged by "renderer.js", included via webpack ');
+    window.occt = oc;
+});
+*/
 
-    var editor = new Editor();
 
-    window.editor = editor; // Expose editor to Console
-    window.THREE = THREE; // Expose THREE to APP Scripts and Console
-    window.VRButton = VRButton; // Expose VRButton to APP Scripts
+window.URL = window.URL || window.webkitURL;
+window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder;
 
-    var viewport = new Viewport(editor);
-    document.body.appendChild(viewport.dom);
+Number.prototype.format = function () {
 
-    var toolbar = new Toolbar(editor);
-    document.body.appendChild(toolbar.dom);
+    return this.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
 
-    var script = new Script(editor);
-    document.body.appendChild(script.dom);
+};
 
-    var player = new Player(editor);
-    document.body.appendChild(player.dom);
+var editor = new Editor();
 
-    var sidebar = new Sidebar(editor);
-    document.body.appendChild(sidebar.dom);
+window.editor = editor; // Expose editor to Console
+window.THREE = THREE; // Expose THREE to APP Scripts and Console
+window.VRButton = VRButton; // Expose VRButton to APP Scripts
 
-    var menubar = new Menubar(editor);
-    document.body.appendChild(menubar.dom);
+var viewport = new Viewport(editor);
+document.body.appendChild(viewport.dom);
 
-    var resizer = new Resizer(editor);
-    document.body.appendChild(resizer.dom);
+var toolbar = new Toolbar(editor);
+document.body.appendChild(toolbar.dom);
 
-    //
+var script = new Script(editor);
+document.body.appendChild(script.dom);
 
-    editor.storage.init(function () {
+var player = new Player(editor);
+document.body.appendChild(player.dom);
 
-        editor.storage.get(function (state) {
+var sidebar = new Sidebar(editor);
+document.body.appendChild(sidebar.dom);
 
-            if (isLoadingFromHash) return;
+var menubar = new Menubar(editor);
+document.body.appendChild(menubar.dom);
 
-            if (state !== undefined) {
+var resizer = new Resizer(editor);
+document.body.appendChild(resizer.dom);
 
-                editor.fromJSON(state);
+//
 
-            }
+editor.storage.init(function () {
 
-            var selected = editor.config.getKey('selected');
+    editor.storage.get(function (state) {
 
-            if (selected !== undefined) {
+        if (isLoadingFromHash) return;
 
-                editor.selectByUuid(selected);
+        if (state !== undefined) {
 
-            }
-
-        });
-
-        //
-
-        var timeout;
-
-        function saveState() {
-
-            if (editor.config.getKey('autosave') === false) {
-
-                return;
-
-            }
-
-            clearTimeout(timeout);
-
-            timeout = setTimeout(function () {
-
-                editor.signals.savingStarted.dispatch();
-
-                timeout = setTimeout(function () {
-
-                    editor.storage.set(editor.toJSON());
-
-                    editor.signals.savingFinished.dispatch();
-
-                }, 100);
-
-            }, 1000);
+            editor.fromJSON(state);
 
         }
 
-        var signals = editor.signals;
+        var selected = editor.config.getKey('selected');
 
-        signals.geometryChanged.add(saveState);
-        signals.objectAdded.add(saveState);
-        signals.objectChanged.add(saveState);
-        signals.objectRemoved.add(saveState);
-        signals.materialChanged.add(saveState);
-        signals.sceneBackgroundChanged.add(saveState);
-        signals.sceneEnvironmentChanged.add(saveState);
-        signals.sceneFogChanged.add(saveState);
-        signals.sceneGraphChanged.add(saveState);
-        signals.scriptChanged.add(saveState);
-        signals.historyChanged.add(saveState);
+        if (selected !== undefined) {
+
+            editor.selectByUuid(selected);
+
+        }
 
     });
 
     //
 
-    document.addEventListener('dragover', function (event) {
+    var timeout;
 
-        event.preventDefault();
-        event.dataTransfer.dropEffect = 'copy';
+    function saveState() {
 
-    }, false);
+        if (editor.config.getKey('autosave') === false) {
 
-    document.addEventListener('drop', function (event) {
-
-        event.preventDefault();
-
-        if (event.dataTransfer.types[0] === 'text/plain') return; // Outliner drop
-
-        if (event.dataTransfer.items) {
-
-            // DataTransferItemList supports folders
-
-            editor.loader.loadItemList(event.dataTransfer.items);
-
-        } else {
-
-            editor.loader.loadFiles(event.dataTransfer.files);
+            return;
 
         }
 
-    }, false);
+        clearTimeout(timeout);
 
-    function onWindowResize() {
+        timeout = setTimeout(function () {
 
-        editor.signals.windowResize.dispatch();
+            editor.signals.savingStarted.dispatch();
 
-    }
+            timeout = setTimeout(function () {
 
-    window.addEventListener('resize', onWindowResize, false);
+                editor.storage.set(editor.toJSON());
 
-    onWindowResize();
+                editor.signals.savingFinished.dispatch();
 
-    //
+            }, 100);
 
-    var isLoadingFromHash = false;
-    var hash = window.location.hash;
-
-    if (hash.substr(1, 5) === 'file=') {
-
-        var file = hash.substr(6);
-
-        if (confirm('Any unsaved data will be lost. Are you sure?')) {
-
-            var loader = new THREE.FileLoader();
-            loader.crossOrigin = '';
-            loader.load(file, function (text) {
-
-                editor.clear();
-                editor.fromJSON(JSON.parse(text));
-
-            });
-
-            isLoadingFromHash = true;
-
-        }
+        }, 1000);
 
     }
 
-    // ServiceWorker
+    var signals = editor.signals;
+
+    signals.geometryChanged.add(saveState);
+    signals.objectAdded.add(saveState);
+    signals.objectChanged.add(saveState);
+    signals.objectRemoved.add(saveState);
+    signals.materialChanged.add(saveState);
+    signals.sceneBackgroundChanged.add(saveState);
+    signals.sceneEnvironmentChanged.add(saveState);
+    signals.sceneFogChanged.add(saveState);
+    signals.sceneGraphChanged.add(saveState);
+    signals.scriptChanged.add(saveState);
+    signals.historyChanged.add(saveState);
+
+});
+
+//
+
+document.addEventListener('dragover', function (event) {
+
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'copy';
+
+}, false);
+
+document.addEventListener('drop', function (event) {
+
+    event.preventDefault();
+
+    if (event.dataTransfer.types[0] === 'text/plain') return; // Outliner drop
+
+    if (event.dataTransfer.items) {
+
+        // DataTransferItemList supports folders
+
+        editor.loader.loadItemList(event.dataTransfer.items);
+
+    } else {
+
+        editor.loader.loadFiles(event.dataTransfer.files);
+
+    }
+
+}, false);
+
+function onWindowResize() {
+
+    editor.signals.windowResize.dispatch();
+
+}
+
+window.addEventListener('resize', onWindowResize, false);
+
+onWindowResize();
+
+//
+
+var isLoadingFromHash = false;
+var hash = window.location.hash;
+
+if (hash.substr(1, 5) === 'file=') {
+
+    var file = hash.substr(6);
+
+    if (confirm('Any unsaved data will be lost. Are you sure?')) {
+
+        var loader = new THREE.FileLoader();
+        loader.crossOrigin = '';
+        loader.load(file, function (text) {
+
+            editor.clear();
+            editor.fromJSON(JSON.parse(text));
+
+        });
+
+        isLoadingFromHash = true;
+
+    }
+
+}
+
+// ServiceWorker
 /*
-    if ('serviceWorker' in navigator) {
+if ('serviceWorker' in navigator) {
 
-        try {
+    try {
 
-            navigator.serviceWorker.register('sw.js');
+        navigator.serviceWorker.register('sw.js');
 
-        } catch (error) {
-
-        }
+    } catch (error) {
 
     }
+
+}
 */
-//};
+
 
