@@ -9,8 +9,8 @@ import { Menubar } from './js/Menubar.js';
 import { Resizer } from './js/Resizer.js';
 import { VRButton } from 'three/examples/jsm/webxr/VRButton.js';
 
-
-document.onload = function createEditorElement() {
+import './css/main.css'
+//document.onload = function createEditorElement() {
     window.URL = window.URL || window.webkitURL;
     window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder;
 
@@ -183,7 +183,7 @@ document.onload = function createEditorElement() {
     }
 
     // ServiceWorker
-
+/*
     if ('serviceWorker' in navigator) {
 
         try {
@@ -195,5 +195,6 @@ document.onload = function createEditorElement() {
         }
 
     }
-};
+*/
+//};
 

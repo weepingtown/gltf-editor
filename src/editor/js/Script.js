@@ -2,7 +2,9 @@ import { UIElement, UIPanel, UIText } from './libs/ui.js';
 
 import { SetScriptValueCommand } from './commands/SetScriptValueCommand.js';
 import { SetMaterialValueCommand } from './commands/SetMaterialValueCommand.js';
-
+import CodeMirror from 'codemirror'
+//import CodeMirror from './libs/codemirror/codemirror.js'
+//import CodeMirror.TernServer from'./libs/codemirror/addon/tern.js'
 function Script( editor ) {
 
 	var signals = editor.signals;
@@ -288,7 +290,7 @@ function Script( editor ) {
 	};
 
 	// tern js autocomplete
-
+/*
 	var server = new CodeMirror.TernServer( {
 		caseInsensitive: true,
 		plugins: { threejs: null }
@@ -351,7 +353,7 @@ function Script( editor ) {
 
 	} );
 
-
+*/
 	//
 
 	signals.editorCleared.add( function () {
